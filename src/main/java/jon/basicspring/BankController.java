@@ -62,9 +62,9 @@ public class BankController {
     }
 
     String runInference(double... numbers) {
-        String modelPath = "/bankModel.onnx";
+        String modelPath = "/model.onnx";
         String scalarPath = "scaler.pkl";
-        try (InputStream is = ANDController.class.getResourceAsStream(modelPath);
+        try (InputStream is = BankController.class.getResourceAsStream(modelPath);
              OrtEnvironment env = OrtEnvironment.getEnvironment();
              InputStream scalarStream = new ClassPathResource(scalarPath).getInputStream();
              ObjectInputStream ois = new ObjectInputStream(scalarStream)) {
@@ -88,7 +88,8 @@ public class BankController {
             float[][] output = (float[][]) result.get(0).getValue();
             return "" + Arrays.toString(output[0]);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            return "Error during inference";
         }
     }
 
